@@ -5,6 +5,7 @@ import {
   playground,
   createRouter,
   createEndpoint,
+  LobbyRoom,
 } from "colyseus";
 
 /**
@@ -18,7 +19,8 @@ const server = defineServer({
    * Define your room handlers:
    */
   rooms: {
-    my_room: defineRoom(MyRoom),
+    my_room: defineRoom(MyRoom).enableRealtimeListing(),
+    lobby: defineRoom(LobbyRoom),
   },
 
   /**
@@ -58,10 +60,12 @@ const server = defineServer({
      * (It is not recommended to expose this route in a production environment)
      */
     if (process.env.NODE_ENV !== "production") {
-      app.use("/", playground());
+      app.use("/playground", playground());
     }
   }
 });
 
 export default server;
 
+/** Named export read by the `colyseus/vite` plugin's `serverEntry`. */
+export { server };
