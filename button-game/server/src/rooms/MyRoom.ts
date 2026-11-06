@@ -1,16 +1,17 @@
 import { Room, Client, CloseCode } from "colyseus";
-import { MyRoomState } from "./schema/MyRoomState.js";
+import { MyRoomState, Player } from "./schema/MyRoomState.js";
 
 export class MyRoom extends Room<{ state: MyRoomState }> {
-  maxClients = 4;
+ maxClients = 4;
   state = new MyRoomState();
-
+ 
   messages = {
-    yourMessageType: (client: Client, message: any) => {
-      /**
-       * Handle "yourMessageType" message.
-       */
-      console.log(client.sessionId, "sent a message:", message);
+    move: (client: Client, message: { x: number, y: number }) => {
+      const player = this.state.players.get(client.sessionId);
+      if (!player) { return; }
+ 
+      player.x = message.x;
+      player.y = message.y;
     },
   };
 
@@ -21,17 +22,14 @@ export class MyRoom extends Room<{ state: MyRoomState }> {
   }
 
   onJoin(client: Client, options: any) {
-    /**
-     * Called when a client joins the room.
-     */
-    console.log(client.sessionId, "joined!");
+    this.state.players.set(client.sessionId, new Player());
+    console.log("chat", `${client.sessionId} joined.`);
+    this.broadcast("chat", `${client.sessionId} joined.`);
   }
-
+ 
   onLeave(client: Client, code: CloseCode) {
-    /**
-     * Called when a client leaves the room.
-     */
-    console.log(client.sessionId, "left!", code);
+    this.state.players.delete(client.sessionId);
+    this.broadcast("chat", `${client.sessionId} left.`);
   }
 
   onDispose() {
