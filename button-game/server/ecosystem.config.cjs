@@ -8,7 +8,7 @@ const os = require("os");
 module.exports = {
   apps: [{
     name: "colyseus-app",
-    script: "dist/server/server.mjs",
+    script: "build/index.js",
     time: true,
     watch: false,
     instances: os.cpus().length,
