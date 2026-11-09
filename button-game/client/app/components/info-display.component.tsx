@@ -5,7 +5,7 @@ import "./info-display.component.css"
 export function InfoDisplay() {
   const infoDisplayContext = useContext(InfoDisplayContext)
 
-  const [show, setShow] = useState(true)
+  const [show, setShow] = useState(false)
 
   return (
     <div className="app-info-display">
@@ -18,7 +18,6 @@ export function InfoDisplay() {
           {infoDisplayContext?.iDContext}
         </pre>
       }
-
     </div>
   )
 }

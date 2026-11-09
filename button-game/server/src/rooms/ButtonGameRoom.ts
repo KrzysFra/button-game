@@ -2,17 +2,13 @@ import { Client, CloseCode, Room } from "colyseus"
 import { ButtonGameRoomState, ButtonGamePlayer } from "../../shared/button-game-state.js"
 
 export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
-  maxClients = 4;
+  maxClients = 8;
   state = new ButtonGameRoomState();
 
   messages = {
     "press-my-button": (client: Client, data: number) => {
       const player = this.state.players.get(client.sessionId)
       if (player.hasPressed) return
-
-
-
-      let total = 0
     }
   };
 
