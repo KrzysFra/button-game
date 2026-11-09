@@ -1,0 +1,26 @@
+.app-info-display {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #333;
+  border-radius: .3em;
+
+  >.title {
+    display: flex;
+    gap: 2em;
+    padding: .2em;
+
+    :hover {
+      cursor: pointer
+    }
+
+    >.text {
+      flex-grow: 1;
+    }
+  }
+
+  >.content {
+    padding: .3em;
+    border-top: 1px solid var(--foreground);
+  }
+}

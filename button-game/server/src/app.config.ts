@@ -10,7 +10,7 @@ import {
 /**
  * Import your Room files
  */
-import { MyRoom } from "./rooms/MyRoom.js";
+import { ButtonGameRoom } from "./rooms/ButtonGameRoom.js";
 
 const server = defineServer({
 
@@ -18,7 +18,7 @@ const server = defineServer({
    * Define your room handlers:
    */
   rooms: {
-    my_room: defineRoom(MyRoom),
+    my_room: defineRoom(ButtonGameRoom),
   },
 
   /**

@@ -1,0 +1,26 @@
+.app-button-game {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  >.title {
+    padding: 1em 0;
+    text-align: center;
+  }
+
+  >.this-player {
+    height: 0;
+    flex-grow: 1;
+    display: flex;
+  }
+
+  >.other-players {
+    height: 0;
+    flex-grow: 1;
+    display: flex;
+  }
+}
