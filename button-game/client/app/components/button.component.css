@@ -1,0 +1,49 @@
+.app-button {
+  --button-z-height: 2em;
+  --button-hover-delta: .2em;
+  --button-pressed-delta: 1em;
+  --total-height: 8em;
+
+  user-select: none;
+
+  >.button-container {
+    position: relative;
+    width: 8em;
+    height: var(--total-height);
+
+    >.button {
+      position: absolute;
+      top: var(--button-hover-delta);
+      left: 0;
+      right: 0;
+      height: calc(var(--total-height) - var(--button-hover-delta) - var(--button-z-height));
+      background: #333;
+      border: 1px solid #ddd;
+      box-shadow: 0 var(--button-z-height) #484848;
+      padding-top: 2em;
+      text-align: center;
+      border-radius: 1em;
+    }
+  }
+
+
+  &.is-hover {
+    >.button-container {
+      cursor: pointer;
+
+      >.button {
+        top: 0;
+        box-shadow: 0 calc(var(--button-z-height) + var(--button-hover-delta)) #484848;
+      }
+    }
+  }
+
+  &.is-pressed {
+    >.button-container {
+      >.button {
+        top: calc(var(--button-hover-delta) + var(--button-pressed-delta));
+        box-shadow: 0 calc(var(--button-z-height) - var(--button-pressed-delta)) #484848;
+      }
+    }
+  }
+}

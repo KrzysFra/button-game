@@ -32,7 +32,7 @@ export function ButtonGame({ room, state }: { room: Room | undefined, state: But
     <div className="app-button-game">
       <div className="title">The BUTTON-Game</div>
       <div className="this-player">
-        <ThisPlayer />
+        <ThisPlayer room={room} />
       </div>
       <div className="other-players">
         <OtherPlayers otherPlayers={otherPlayers} />
