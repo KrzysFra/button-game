@@ -6,9 +6,13 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
   state = new ButtonGameRoomState();
 
   messages = {
-    "press-my-button": (client: Client, data: number) => {
+    "pressed": (client: Client, data: boolean) => {
       const player = this.state.players.get(client.sessionId)
-      if (player.hasPressed) return
+      player.isPressed = data
+    },
+    "hover": (client: Client, data: boolean) => {
+      const player = this.state.players.get(client.sessionId)
+      player.isHover = data
     }
   };
 

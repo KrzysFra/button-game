@@ -10,7 +10,7 @@ export function ThisPlayer({ room }: { room: Room | undefined }) {
         <div className="indicator"></div>
         <div className="indicator"></div>
       </div>
-      <Button room={room} />
+      <Button room={room} label="Your Button" />
     </div>
   )
 }

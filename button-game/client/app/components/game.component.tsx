@@ -23,7 +23,6 @@ export function ButtonGame({ room, state }: { room: Room | undefined, state: But
       })
 
       setOtherPlayers(newOtherPlayers)
-      console.log(newOtherPlayers)
     }
   }, [state.players])
 

@@ -3,27 +3,34 @@ import { useEffect, useState } from "react"
 import "./button.component.css"
 
 
-export function Button({ room }: { room: Room | undefined }) {
-  const [isHover, setIsHover] = useState(false)
-  const [isPressed, setIsPressed] = useState(false)
+export function Button(
+  { room, isHover, isPressed, label, width = "8em", height = "8em" }
+    : { room?: Room, isHover?: boolean, isPressed?: boolean, label?: string, width?: string, height?: string }
+) {
+  const [isHoverL, setIsHoverL] = useState(false)
+  const [isPressedL, setIsPressedL] = useState(false)
 
   const onDown = () => {
-    setIsPressed(true)
+    if (isPressed !== undefined) return
+    setIsPressedL(true)
     room?.send("pressed", true)
   }
 
   const onUp = () => {
-    setIsPressed(false)
+    if (isPressed !== undefined) return
+    setIsPressedL(false)
     room?.send("pressed", false)
   }
 
   const onMouseEnter = () => {
-    setIsHover(true)
+    if (isHover !== undefined) return
+    setIsHoverL(true)
     room?.send("hover", true)
   }
 
   const onMouseLeave = () => {
-    setIsHover(false)
+    if (isHover !== undefined) return
+    setIsHoverL(false)
     room?.send("hover", false)
     onUp()
   }
@@ -32,27 +39,25 @@ export function Button({ room }: { room: Room | undefined }) {
 
   useEffect(() => {
     const newClasses = ["app-button"]
-    if (isHover) newClasses.push("is-hover")
-    if (isPressed) newClasses.push("is-pressed")
+    if (isHoverL || isHover) newClasses.push("is-hover")
+    if (isPressedL || isPressed) newClasses.push("is-pressed")
 
     setClasses(newClasses.join(" "))
   },
-    [isHover, isPressed]
+    [isHoverL, isPressedL, isHover, isPressed]
   )
 
   return (
     <div
       className={classes}
+      onMouseDown={() => onDown()}
+      onMouseUp={() => onUp()}
+      onMouseEnter={() => onMouseEnter()}
+      onMouseLeave={() => onMouseLeave()}
+      style={{ height, width }}
     >
-      <div className="button-container"
-        onMouseDown={() => onDown()}
-        onMouseUp={() => onUp()}
-        onMouseEnter={() => onMouseEnter()}
-        onMouseLeave={() => onMouseLeave()}
-      >
-        <div className="button">
-          mybutton
-        </div>
+      <div className="button">
+        <div className="label">{label}</div>
       </div>
     </div>
   )
