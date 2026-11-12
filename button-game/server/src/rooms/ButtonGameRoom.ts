@@ -13,7 +13,18 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     "hover": (client: Client, data: boolean) => {
       const player = this.state.players.get(client.sessionId)
       player.isHover = data
-    }
+    },
+    "cpu-add": (client: Client, data: boolean) => {
+      const newCPU = new ButtonGamePlayer()
+      newCPU.name = "CPU" + this.state.amountCPUs
+      this.state.players.set(newCPU.name, newCPU)
+      this.state.amountCPUs++
+    },
+    "cpu-rem": (client: Client, data: boolean) => {
+      if (this.state.amountCPUs <= 0) return
+      this.state.amountCPUs--
+      this.state.players.delete("CPU" + this.state.amountCPUs)
+    },
   };
 
   onCreate(options: any) {

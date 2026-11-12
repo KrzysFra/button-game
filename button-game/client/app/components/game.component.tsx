@@ -10,6 +10,10 @@ export function ButtonGame({ room, state }: { room: Room | undefined, state: But
   const context = useContext(InfoDisplayContext)
 
   useEffect(() => {
+    context?.setRoom?.(room)
+  }, [room])
+
+  useEffect(() => {
     context?.setIDContext?.(JSON.stringify(state, null, 2))
   }, [state])
 

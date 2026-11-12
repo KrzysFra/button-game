@@ -11,7 +11,8 @@ export const ButtonGamePlayer = schema({
   isEliminated: t.boolean().default(false),
   isPressed: t.boolean().default(false),
   isHover: t.boolean().default(false),
-  isReady: t.boolean().default(false)
+  isReady: t.boolean().default(false),
+  isCPU: t.boolean().default(false),
 })
 export type ButtonGamePlayer = SchemaType<typeof ButtonGamePlayer>
 
@@ -19,6 +20,7 @@ export const ButtonGameRoomState = schema({
   phase: t.number().default(phase.WAITING_FOR_START),
   countdown: t.number().default(0),
   players: t.map(ButtonGamePlayer),
+  amountCPUs: t.number().default(0),
 })
 export type ButtonGameRoomState = SchemaType<typeof ButtonGameRoomState>
 

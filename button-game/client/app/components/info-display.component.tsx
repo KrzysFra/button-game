@@ -14,9 +14,15 @@ export function InfoDisplay() {
         <div className="button">{show ? "X" : "V"}</div>
       </div>
       {show &&
-        <pre className="content">
-          {infoDisplayContext?.iDContext}
-        </pre>
+        <div>
+          <div className="buttons-bar">
+            <div onClick={() => infoDisplayContext.room?.send("cpu-add")}>+CPU</div>
+            <div onClick={() => infoDisplayContext.room?.send("cpu-rem")}>-CPU</div>
+          </div>
+          <pre className="content">
+            {infoDisplayContext?.iDContext}
+          </pre>
+        </div>
       }
     </div>
   )
