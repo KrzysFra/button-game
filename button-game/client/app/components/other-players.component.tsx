@@ -14,9 +14,11 @@ export function OtherPlayers({ otherPlayers }: { otherPlayers: Map<string, Butto
 }
 
 function OtherPlayer({ player }: { player: ButtonGamePlayer }) {
+
   return (
     <div className="app-other-player">
-      <div className="name">{player.name}</div>
+      <div className={"name" + (player.isEliminated ? " eliminated" : "")}>{player.name}</div>
+      <div className="time">{Math.round(player.myTime || 0)} ms</div>
       <div className="button-container">
         <Button isHover={player.isHover} isPressed={player.isPressed} height="4em" width="4em" />
       </div>

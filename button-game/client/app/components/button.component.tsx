@@ -4,32 +4,38 @@ import "./button.component.css"
 
 
 export function Button(
-  { room, isHover, isPressed, label, width = "8em", height = "8em" }
-    : { room?: Room, isHover?: boolean, isPressed?: boolean, label?: string, width?: string, height?: string }
+  { room, isHover, isPressed, onPressed, label, width = "8em", height = "8em" }
+    : { room?: Room, isHover?: boolean, isPressed?: boolean, onPressed?: (is: boolean) => void, label?: string, width?: string, height?: string }
 ) {
   const [isHoverL, setIsHoverL] = useState(false)
   const [isPressedL, setIsPressedL] = useState(false)
 
   const onDown = () => {
     if (isPressed !== undefined) return
+    if (isPressedL) return
     setIsPressedL(true)
     room?.send("pressed", true)
+    onPressed?.(true)
   }
 
   const onUp = () => {
     if (isPressed !== undefined) return
+    if (!isPressedL) return
     setIsPressedL(false)
     room?.send("pressed", false)
+    onPressed?.(false)
   }
 
   const onMouseEnter = () => {
     if (isHover !== undefined) return
+    if (isHoverL) return
     setIsHoverL(true)
     room?.send("hover", true)
   }
 
   const onMouseLeave = () => {
     if (isHover !== undefined) return
+    if (!isHoverL) return
     setIsHoverL(false)
     room?.send("hover", false)
     onUp()

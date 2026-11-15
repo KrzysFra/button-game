@@ -18,6 +18,7 @@ export function InfoDisplay() {
           <div className="buttons-bar">
             <div onClick={() => infoDisplayContext.room?.send("cpu-add")}>+CPU</div>
             <div onClick={() => infoDisplayContext.room?.send("cpu-rem")}>-CPU</div>
+            <div onClick={() => infoDisplayContext.room?.send("start-phase-end")}>PE</div>
           </div>
           <pre className="content">
             {infoDisplayContext?.iDContext}

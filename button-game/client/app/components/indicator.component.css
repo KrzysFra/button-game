@@ -1,0 +1,21 @@
+.app-indicator {
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  border: 2px solid transparent;
+
+  &.BLACK {
+    border-color: #666;
+    background-color: #000
+  }
+
+  &.YELLOW {
+    border-color: #aa0;
+    background-color: #ff0;
+  }
+
+  &.GREEN {
+    border-color: #070;
+    background-color: #0f0;
+  }
+}

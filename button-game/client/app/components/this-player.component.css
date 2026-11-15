@@ -10,13 +10,5 @@
   >.indicator-row {
     display: flex;
     gap: 2em;
-
-    .indicator {
-      width: 2em;
-      height: 2em;
-      background: yellow;
-      border: 1px solid #aa0;
-      border-radius: 1em;
-    }
   }
 }
