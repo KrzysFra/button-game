@@ -39,7 +39,11 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     },
     "start-phase-end": () => {
       this.phasePlayEnd()
-    }
+    },
+    "my-name": (client: Client, data: string) => {
+      const player = this.state.players.get(client.sessionId)
+      player.name = data
+    },
   };
 
   onCreate(options: any) {
@@ -57,7 +61,7 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
 
   onJoin(client: Client, options: any) {
     const newPlayer = new ButtonGamePlayer()
-    newPlayer.name = (this.state.players.size + 1).toString()
+    // newPlayer.name = (this.state.players.size + 1).toString()
     this.state.players.set(client.sessionId, newPlayer)
   }
 

@@ -10,7 +10,7 @@ export enum ButtonGamePhase {
 }
 
 export const ButtonGamePlayer = schema({
-  name: t.string().default("no name"),
+  name: t.string().default(""),
   isEliminated: t.boolean().default(false),
   isPressed: t.boolean().default(false),
   isHover: t.boolean().default(false),

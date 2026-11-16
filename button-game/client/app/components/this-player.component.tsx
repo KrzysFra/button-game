@@ -7,6 +7,7 @@ import { IndicatorBar } from "./indicator-bar.component"
 import { Instructions } from "./instructions.component"
 import "./this-player.component.css"
 import { TimeDisplay } from "./time-display.component"
+import { NameOverlay } from "./name-overlay.component"
 
 export function ThisPlayer({ room }: { room: Room | undefined }) {
   const roomState = useRoomState<ButtonGameRoomState>(room)
@@ -114,6 +115,7 @@ export function ThisPlayer({ room }: { room: Room | undefined }) {
         onPressed={onPressed}
         isDisabled={me.current?.isEliminated}
       />
+      {!me.current?.name ? <NameOverlay room={room} /> : ""}
     </div>
   )
 }

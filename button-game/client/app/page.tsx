@@ -2,7 +2,6 @@
 
 import { Room } from "@colyseus/sdk"
 import { createContext, Dispatch, SetStateAction, useState } from "react"
-import { InfoDisplay } from "./components/info-display.component"
 import { Game } from "./functions/game.function"
 
 export const InfoDisplayContext = createContext<
@@ -22,7 +21,7 @@ export default function Home() {
     <InfoDisplayContext.Provider value={{ iDContext, setIDContext, room, setRoom }}>
       <div>
         <Game />
-        <InfoDisplay />
+        {/* <InfoDisplay /> */}
       </div>
     </InfoDisplayContext.Provider>
   )

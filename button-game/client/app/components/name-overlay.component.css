@@ -1,0 +1,46 @@
+.app-name-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, .8);
+  padding-bottom: 40vh;
+
+  >div {
+
+    .label {
+      font-weight: bold;
+    }
+
+    >.input {
+      >input {
+        background-color: #ccc;
+        color: #333;
+        padding: 2px;
+        border-radius: 2px;
+      }
+    }
+
+    >.button {
+      margin-top: 1em;
+      width: 100%;
+      background-color: #666;
+      border: 2px solid #aaa;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.disabled {
+        opacity: .3;
+      }
+    }
+  }
+}
