@@ -1,18 +1,17 @@
 .app-this-player {
-  background: #633;
+  background: #222;
   flex-grow: 1;
-  gap: 2em;
+  gap: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  >.text {
-    text-align: center;
+  >.name {
+    font-weight: bold;
   }
 
-  >.indicator-row {
-    display: flex;
-    gap: 2em;
+  &.eliminated {
+    background: #322;
   }
 }

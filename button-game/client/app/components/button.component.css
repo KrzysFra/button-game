@@ -41,4 +41,13 @@
       box-shadow: 0 calc(var(--button-z-height) - var(--button-pressed-delta)) #484848;
     }
   }
+
+  &.is-disabled {
+    >.button {
+      top: calc(var(--button-hover-delta) + var(--button-pressed-delta));
+      bottom: calc(var(--button-z-height) - var(--button-pressed-delta));
+      box-shadow: 0 calc(var(--button-z-height) - var(--button-pressed-delta)) #200;
+      background: #500;
+    }
+  }
 }

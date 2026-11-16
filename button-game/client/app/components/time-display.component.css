@@ -1,1 +1,36 @@
+.app-time-display {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+  >.calculating {
+    height: 20px;
+    width: 100px;
+    position: relative;
+    border: 2px solid #0a0;
+    border-radius: 10px;
+    overflow: hidden;
+
+    >.calculating-line {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      bottom: 0;
+      left: 0;
+      background-color: #0a0;
+      animation-name: calculating-animation;
+      animation-duration: 1.5s;
+    }
+  }
+}
+
+@keyframes calculating-animation {
+  0% {
+    right: 100%
+  }
+
+  100% {
+    right: 0
+  }
+}

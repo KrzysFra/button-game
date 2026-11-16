@@ -1,5 +1,5 @@
 import { Room } from "@colyseus/sdk"
-import { ButtonGamePlayer, ButtonGameRoomState } from "@shared"
+import { ButtonGamePhase, ButtonGamePlayer, ButtonGameRoomState } from "@shared"
 import { useContext, useEffect, useState } from "react"
 import { InfoDisplayContext } from "../page"
 import "./game.component.css"
@@ -34,11 +34,11 @@ export function ButtonGame({ room, state }: { room: Room | undefined, state: But
   return (
     <div className="app-button-game">
       <div className="title">The BUTTON-Game</div>
+      <div className="other-players">
+        <OtherPlayers otherPlayers={otherPlayers} buttonGamePhase={state.phase as ButtonGamePhase} />
+      </div>
       <div className="this-player">
         <ThisPlayer room={room} />
-      </div>
-      <div className="other-players">
-        <OtherPlayers otherPlayers={otherPlayers} />
       </div>
     </div>
   )

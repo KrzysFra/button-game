@@ -3,7 +3,7 @@ import { ButtonGamePhase, ButtonGamePlayer, ButtonGameRoomState } from "../../sh
 import { sleep } from "../../shared/utils.js"
 
 export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
-  maxClients = 8;
+  maxClients = 32;
   state = new ButtonGameRoomState();
 
   endOfPlayingTimerId: NodeJS.Timeout | undefined = undefined;
@@ -19,23 +19,7 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
       ].includes(this.state.phase)
       ) {
         const allPlayersPressed = this.state.players.values().filter(p => !p.isCPU).reduce((p, v) => p && v.isPressed, true)
-        if (allPlayersPressed) {
-          this.state.phase = ButtonGamePhase.PLAYING
-          this.state.delay = (1 + Math.random() + Math.random()) * 1000
-          this.endOfPlayingTimerId = setTimeout(() => { this.phasePlayEnd() }, 10000)
-
-
-          // CPUs simulate behaviour
-          Array.from(this.state.players.entries()).filter(([_, p]) => p.isCPU).forEach(([sId, p]) => {
-            p.isPressed = true
-            const cpuTime = (1 + Math.random() + Math.random()) * 1000
-            const skew = 500
-            setTimeout(() => {
-              this.setMyTime(sId, cpuTime - this.state.delay + skew)
-              p.isPressed = false
-            }, 2000 + cpuTime + skew)
-          })
-        }
+        if (allPlayersPressed) this.phasePlay()
       }
     },
     "hover": (client: Client, data: boolean) => {
@@ -60,6 +44,12 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
 
   onCreate(options: any) {
     console.log("room", this.roomId, "creating...")
+    this.addCPU()
+    this.addCPU()
+    this.addCPU()
+    this.addCPU()
+    this.addCPU()
+    this.addCPU()
     this.addCPU()
     this.addCPU()
     this.addCPU()
@@ -97,9 +87,30 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     player.myTime = time
 
     // all my-times received
-    if (Array.from(this.state.players).reduce((p, [_, pl]) => p && pl.myTime != undefined, true)) {
+    const haveReceivedAllTimes = Array.from(this.state.players).reduce(
+      (p, [_, pl]) => p && (pl.isEliminated || pl.myTime != undefined)
+      , true)
+    if (haveReceivedAllTimes) {
       this.phasePlayEnd()
     }
+  }
+
+  phasePlay() {
+    this.state.phase = ButtonGamePhase.PLAYING
+    this.state.delay = (1 + Math.random() + Math.random()) * 1000
+    this.endOfPlayingTimerId = setTimeout(() => { this.phasePlayEnd() }, 10000)
+
+
+    // CPUs simulate behaviour
+    Array.from(this.state.players.entries()).filter(([_, p]) => p.isCPU).forEach(([sId, p]) => {
+      p.isPressed = true
+      const cpuTime = (1 + Math.random() + Math.random()) * 1000
+      const skew = 500
+      setTimeout(() => {
+        this.setMyTime(sId, cpuTime - this.state.delay + skew)
+        p.isPressed = false
+      }, 2000 + cpuTime + skew)
+    })
   }
 
   async phasePlayEnd() {
@@ -144,7 +155,11 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     await sleep(2000) // pause for effect
 
     // reset
-    this.state.phase = ButtonGamePhase.WAITING_FOR_RESET
     this.state.players.values().forEach(p => p.myTime = undefined)
+    this.state.phase = ButtonGamePhase.WAITING_FOR_RESET
+    const humanPlayersLeft = this.state.players.values()
+      .reduce((p, pl) => (!pl.isCPU && !pl.isEliminated) ? p + 1 : p, 0)
+    if (humanPlayersLeft == 0)
+      this.phasePlay()
   }
 }

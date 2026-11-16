@@ -2,22 +2,22 @@ import { useEffect, useState } from "react"
 import "./instructions.component.css"
 import { PlayingState } from "./this-player.component"
 
-export function Instructions({ playingState, isTimeSent }: { playingState: PlayingState, isTimeSent: boolean }) {
+export function Instructions({ playingState, isTimeSent, isEliminated }: { playingState: PlayingState, isTimeSent: boolean, isEliminated: boolean }) {
   const [classes, setClasses] = useState(`app-instructions ${playingState}`)
   const [text, setText] = useState("no instruction")
 
   useEffect(() => {
-    setText(getText(playingState, isTimeSent))
+    setText(getText(playingState, isTimeSent, isEliminated))
     setClasses(`app-instructions ${playingState}`)
-  }, [playingState, isTimeSent])
+  }, [playingState, isTimeSent, isEliminated])
 
   return (<div className={classes}>
-    {playingState}
-    <br /> {text}
+    {text || <span>&nbsp;</span>}
   </div>)
 }
 
-function getText(playingState: PlayingState, isTimeSent: boolean) {
+function getText(playingState: PlayingState, isTimeSent: boolean, isEliminated: boolean) {
+  if (isEliminated) return "You are out"
   switch (playingState) {
     case PlayingState.WAITING_FOR_START:
       return "Press and HOLD your button to start"
@@ -29,7 +29,9 @@ function getText(playingState: PlayingState, isTimeSent: boolean) {
     case PlayingState.WAITING_FOR_PLAYER:
       if (isTimeSent) return "Waiting for Others"
       return "LET GO!!!!"
+    case PlayingState.GAME_END:
+      return "YOU WON"
     default:
-      return "._________."
+      return ""
   }
 }

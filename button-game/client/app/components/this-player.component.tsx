@@ -3,9 +3,9 @@ import { Room } from "@colyseus/sdk"
 import { ButtonGamePhase, ButtonGamePlayer, ButtonGameRoomState, sleep } from "@shared"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "./button.component"
-import "./this-player.component.css"
 import { IndicatorBar } from "./indicator-bar.component"
 import { Instructions } from "./instructions.component"
+import "./this-player.component.css"
 import { TimeDisplay } from "./time-display.component"
 
 export function ThisPlayer({ room }: { room: Room | undefined }) {
@@ -98,18 +98,22 @@ export function ThisPlayer({ room }: { room: Room | undefined }) {
   }, [roomState?.players?.[room?.sessionId || ""]])
 
   return (
-    <div className="app-this-player">
-      <div className="text">
-        {playingState}
-        <br /> {roomState?.phase}
-        <br /> {me.current?.isEliminated ? "eliminated" : "playing"}
-        <Instructions playingState={playingState} isTimeSent={isTimeSent} />
+    <div className={"app-this-player" + (me.current?.isEliminated ? " eliminated" : "")}>
+      <div className="name">
+        {me.current?.name}
       </div>
-      <div>
-        <TimeDisplay playingState={playingState} time={myTime} />
-      </div>
+      {[PlayingState.CONCLUSION_CALCULATION, PlayingState.CONCLUSION_RESULT].includes(playingState) && !me.current?.isEliminated
+        ? <TimeDisplay buttonGamePhase={roomState?.phase as ButtonGamePhase} time={myTime} />
+        : <Instructions playingState={playingState} isTimeSent={isTimeSent} isEliminated={!!me.current?.isEliminated} />
+      }
       <IndicatorBar playingState={playingState} />
-      <Button room={room} label="Your Button" onPressed={onPressed} />
+
+      <Button
+        room={room}
+        label="Your Button"
+        onPressed={onPressed}
+        isDisabled={me.current?.isEliminated}
+      />
     </div>
   )
 }

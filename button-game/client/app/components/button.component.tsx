@@ -4,8 +4,8 @@ import "./button.component.css"
 
 
 export function Button(
-  { room, isHover, isPressed, onPressed, label, width = "8em", height = "8em" }
-    : { room?: Room, isHover?: boolean, isPressed?: boolean, onPressed?: (is: boolean) => void, label?: string, width?: string, height?: string }
+  { room, isHover, isPressed, onPressed, isDisabled, label, width = "8em", height = "8em" }
+    : ButtonState
 ) {
   const [isHoverL, setIsHoverL] = useState(false)
   const [isPressedL, setIsPressedL] = useState(false)
@@ -45,12 +45,15 @@ export function Button(
 
   useEffect(() => {
     const newClasses = ["app-button"]
-    if (isHoverL || isHover) newClasses.push("is-hover")
-    if (isPressedL || isPressed) newClasses.push("is-pressed")
+    if (isDisabled) newClasses.push("is-disabled")
+    else {
+      if (isHoverL || isHover) newClasses.push("is-hover")
+      if (isPressedL || isPressed) newClasses.push("is-pressed")
+    }
 
     setClasses(newClasses.join(" "))
   },
-    [isHoverL, isPressedL, isHover, isPressed]
+    [isHoverL, isPressedL, isHover, isPressed, isDisabled]
   )
 
   return (
@@ -68,4 +71,15 @@ export function Button(
     </div>
   )
 
+}
+
+interface ButtonState {
+  room?: Room,
+  isHover?: boolean,
+  isPressed?: boolean,
+  onPressed?: (is: boolean) => void,
+  isDisabled?: boolean,
+  label?: string,
+  width?: string,
+  height?: string
 }
