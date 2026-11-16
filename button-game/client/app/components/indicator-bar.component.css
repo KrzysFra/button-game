@@ -1,0 +1,4 @@
+.app-indicator-bar {
+  display: flex;
+  gap: 2em;
+}

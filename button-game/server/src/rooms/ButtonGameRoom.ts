@@ -1,5 +1,6 @@
 import { Client, CloseCode, Room } from "colyseus"
 import { ButtonGamePhase, ButtonGamePlayer, ButtonGameRoomState } from "../../shared/button-game-state.js"
+import { sleep } from "../../shared/utils.js"
 
 export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
   maxClients = 8;
@@ -12,7 +13,11 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
       const player = this.state.players.get(client.sessionId)
       player.isPressed = data
 
-      if ([ButtonGamePhase.WAITING_FOR_START.valueOf(), ButtonGamePhase.WAITING_FOR_RESET.valueOf()].includes(this.state.phase)) {
+      if ([
+        ButtonGamePhase.WAITING_FOR_START.valueOf(),
+        ButtonGamePhase.WAITING_FOR_RESET.valueOf()
+      ].includes(this.state.phase)
+      ) {
         const allPlayersPressed = this.state.players.values().filter(p => !p.isCPU).reduce((p, v) => p && v.isPressed, true)
         if (allPlayersPressed) {
           this.state.phase = ButtonGamePhase.PLAYING
@@ -20,7 +25,7 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
           this.endOfPlayingTimerId = setTimeout(() => { this.phasePlayEnd() }, 10000)
 
 
-          // CPUs simulte behaviour
+          // CPUs simulate behaviour
           Array.from(this.state.players.entries()).filter(([_, p]) => p.isCPU).forEach(([sId, p]) => {
             p.isPressed = true
             const cpuTime = (1 + Math.random() + Math.random()) * 1000
@@ -87,6 +92,8 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
 
   setMyTime(clientId: string, time: number) {
     const player = this.state.players.get(clientId)
+    if (player.myTime != undefined) return
+
     player.myTime = time
 
     // all my-times received
@@ -95,13 +102,15 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     }
   }
 
-  phasePlayEnd() {
+  async phasePlayEnd() {
     if (this.endOfPlayingTimerId) {
       clearTimeout(this.endOfPlayingTimerId)
       this.endOfPlayingTimerId = undefined
     }
 
     this.state.phase = ButtonGamePhase.CONCLUSION_CALCULATION
+    await sleep(2000) // pause for effect
+
     const playingPlayers = Array.from(this.state.players.entries())
       .filter(([_, v]) => { return !v.isEliminated })
 
@@ -111,6 +120,8 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
       .forEach(([_, p]) => p.isEliminated = true)
 
     if (this.state.players.values().reduce((p, pl) => !pl.isEliminated ? p + 1 : p, 0) <= 1) {
+      this.state.phase = ButtonGamePhase.CONCLUSION_RESULT
+      await sleep(2000) // pause for effect
       this.state.phase = ButtonGamePhase.GAME_END
       return
     }
@@ -123,11 +134,17 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
     sortedPlayers[sortedPlayers.length - 1][1].isEliminated = true
 
     if (this.state.players.values().reduce((p, pl) => !pl.isEliminated ? p + 1 : p, 0) <= 1) {
+      this.state.phase = ButtonGamePhase.CONCLUSION_RESULT
+      await sleep(2000) // pause for effect
       this.state.phase = ButtonGamePhase.GAME_END
       return
     }
 
+    this.state.phase = ButtonGamePhase.CONCLUSION_RESULT
+    await sleep(2000) // pause for effect
+
     // reset
     this.state.phase = ButtonGamePhase.WAITING_FOR_RESET
+    this.state.players.values().forEach(p => p.myTime = undefined)
   }
 }
