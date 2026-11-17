@@ -138,6 +138,9 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
       this.state.phase = ButtonGamePhase.CONCLUSION_RESULT
       await sleep(2000) // pause for effect
       this.state.phase = ButtonGamePhase.GAME_END
+      await sleep(5000) // pause for effect
+      this.state.phase = ButtonGamePhase.WAITING_FOR_START
+      this.state.players.forEach(p => p.isEliminated = false)
       return
     }
 
@@ -152,6 +155,9 @@ export class ButtonGameRoom extends Room<{ state: ButtonGameRoomState }> {
       this.state.phase = ButtonGamePhase.CONCLUSION_RESULT
       await sleep(2000) // pause for effect
       this.state.phase = ButtonGamePhase.GAME_END
+      await sleep(5000) // pause for effect
+      this.state.players.forEach(p => p.isEliminated = false)
+      this.state.phase = ButtonGamePhase.WAITING_FOR_START
       return
     }
 
